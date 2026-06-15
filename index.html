@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PC・機器貸出管理システム | TEsJapan.gk</title>
+  <meta name="description" content="PC・機器の貸出をWebで申請・承認。QRコードで持ち出し・返却を記録。誰が何を持っているかを常に把握。アプリ不要でブラウザだけで使えます。">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --accent: #f59e0b;
+      --green: #10b981;
+      --sky: #e0f2fe;
+      --light: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      background: var(--white);
+    }
+
+    header {
+      background: var(--white);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .logo { font-size: 1.3rem; font-weight: 900; color: var(--primary); letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+    nav a:hover { color: var(--primary); }
+    .btn-header { background: var(--primary); color: var(--white) !important; padding: 9px 22px; border-radius: 8px; font-weight: 700; }
+
+    .hero {
+      background: linear-gradient(160deg, #eff6ff 0%, #dbeafe 40%, #e0f2fe 100%);
+      padding: 100px 40px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+    .hero h1 .highlight { color: var(--primary); }
+    .hero p { font-size: 1.1rem; color: var(--muted); max-width: 580px; margin: 0 auto 40px; }
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      padding: 16px 36px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+    }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--primary);
+      padding: 16px 36px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 2px solid #bfdbfe;
+    }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; margin-top: 64px; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2.4rem; font-weight: 900; color: var(--primary); line-height: 1; }
+    .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+
+    section { padding: 88px 40px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .section-tag { color: var(--primary); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 14px; line-height: 1.3; }
+    .section-desc { color: var(--muted); font-size: 1rem; max-width: 540px; margin-bottom: 56px; }
+
+    .pain { background: #fffbeb; }
+    .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .pain-card { background: var(--white); border-radius: 12px; padding: 28px 24px; border: 1px solid #fde68a; }
+    .pain-card .icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .pain-card p { font-size: 0.92rem; color: #374151; line-height: 1.65; }
+    .pain-card strong { color: #b45309; }
+
+    .solution { background: var(--white); }
+    .solution-flow { display: flex; align-items: center; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .flow-step { background: var(--sky); border-radius: 16px; padding: 28px 24px; text-align: center; width: 185px; border: 2px solid #bae6fd; }
+    .flow-step .num { background: var(--primary); color: var(--white); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; margin: 0 auto 12px; font-size: 0.9rem; }
+    .flow-step .step-icon { font-size: 2.2rem; margin-bottom: 10px; }
+    .flow-step p { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .flow-arrow { font-size: 1.6rem; color: #93c5fd; }
+
+    .features { background: #f8fafc; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 24px; }
+    .feature-card { background: var(--white); border-radius: 14px; padding: 32px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+    .feature-icon { width: 52px; height: 52px; background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+
+    .pricing { background: #eff6ff; }
+    .pricing-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; max-width: 720px; margin: 0 auto; }
+    .price-card { background: var(--white); border-radius: 20px; padding: 40px 32px; text-align: center; border: 2px solid #e2e8f0; position: relative; }
+    .price-card.featured { border-color: var(--primary); box-shadow: 0 8px 32px rgba(37,99,235,0.18); }
+    .featured-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--accent); color: var(--white); padding: 5px 20px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; white-space: nowrap; }
+    .price-name { font-size: 0.9rem; font-weight: 700; color: var(--muted); margin-bottom: 10px; }
+    .price-amount { font-size: 2.8rem; font-weight: 900; color: var(--primary); line-height: 1; }
+    .price-amount span { font-size: 0.9rem; font-weight: 400; color: var(--muted); }
+    .price-note { font-size: 0.8rem; color: var(--muted); margin: 10px 0 24px; }
+    .price-list { text-align: left; margin: 20px 0; }
+    .price-list li { list-style: none; padding: 9px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.88rem; display: flex; align-items: flex-start; gap: 10px; color: #374151; }
+    .price-list li::before { content: '✓'; color: var(--green); font-weight: 800; flex-shrink: 0; }
+    .btn-price { display: block; background: var(--primary); color: var(--white); text-decoration: none; padding: 14px; border-radius: 10px; font-weight: 700; margin-top: 24px; }
+    .price-notice { text-align: center; margin-top: 32px; font-size: 0.83rem; color: var(--muted); background: var(--white); padding: 16px 24px; border-radius: 10px; max-width: 720px; margin-left: auto; margin-right: auto; border: 1px solid #dbeafe; }
+
+    .cta { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%); color: var(--white); text-align: center; padding: 88px 40px; }
+    .cta h2 { color: var(--white); margin-bottom: 16px; }
+    .cta p { color: rgba(255,255,255,0.82); margin-bottom: 40px; }
+    .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-cta-white { background: var(--white); color: var(--primary); padding: 16px 36px; border-radius: 10px; text-decoration: none; font-weight: 700; }
+    .btn-cta-outline { background: transparent; color: var(--white); padding: 16px 36px; border-radius: 10px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.5); }
+
+    footer { background: #1e293b; color: rgba(255,255,255,0.65); padding: 52px 40px 32px; }
+    .footer-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .footer-logo { color: var(--white); font-size: 1.3rem; font-weight: 900; margin-bottom: 14px; display: block; }
+    .footer-logo span { color: var(--accent); }
+    .footer-brand p { font-size: 0.85rem; line-height: 1.85; }
+    .footer-info h4 { color: var(--white); font-size: 0.9rem; margin-bottom: 16px; font-weight: 700; }
+    .footer-info p { font-size: 0.85rem; line-height: 2; }
+    .footer-bottom { max-width: 1000px; margin: 24px auto 0; text-align: center; font-size: 0.78rem; color: rgba(255,255,255,0.35); }
+
+    @media (max-width: 640px) {
+      header { padding: 14px 20px; }
+      nav a.hide-sp { display: none; }
+      section { padding: 64px 20px; }
+      .hero { padding: 72px 20px 56px; }
+      .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">TEs<span>Japan.gk</span></div>
+  <nav>
+    <a href="#features" class="hide-sp">機能</a>
+    <a href="#pricing" class="hide-sp">料金</a>
+    <a href="#contact" class="btn-header">お問い合わせ</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">💻 クラウド型 PC・機器貸出管理システム</div>
+    <h1>誰が何を持っているか、<br><span class="highlight">いつでも一目でわかる。</span></h1>
+    <p>アプリ不要。Web申請・承認・QRスキャンで貸出から返却まで完全デジタル化。行方不明のPCをゼロに。</p>
+    <div class="hero-buttons">
+      <a href="https://pc-loan-system-v2-production.up.railway.app/login?from=%2F" target="_blank" class="btn-primary">無料デモを見る →</a>
+      <a href="#features" class="btn-secondary">機能を確認する</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">0件</div><div class="stat-label">PC行方不明の件数</div></div>
+      <div class="stat"><div class="stat-num">即日</div><div class="stat-label">運用開始できる速さ</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">貸出履歴の追跡率</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pain">
+  <div class="container">
+    <div class="section-tag">PROBLEM</div>
+    <h2>こんな困りごと、ありませんか？</h2>
+    <div class="pain-grid">
+      <div class="pain-card"><div class="icon">📋</div><p>ExcelやホワイトボードでPCの貸出を管理していて、<strong>誰が何を持っているかわからなくなる</strong></p></div>
+      <div class="pain-card"><div class="icon">📅</div><p>返却期限を過ぎても気づかず、<strong>貸出中のPCが行方不明になることがある</strong></p></div>
+      <div class="pain-card"><div class="icon">🔍</div><p>棚卸しや監査のとき、<strong>貸出履歴をすぐに出せない</strong></p></div>
+      <div class="pain-card"><div class="icon">🔄</div><p>担当者が変わると経緯がわからなくなり、<strong>引き継ぎに時間がかかる</strong></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="solution">
+  <div class="container">
+    <div class="section-tag">SOLUTION</div>
+    <h2>申請から返却まで<span style="color:var(--primary)">4ステップ</span>で完結</h2>
+    <p class="section-desc">Webブラウザだけで完結。アプリのインストールは一切不要です。</p>
+    <div class="solution-flow">
+      <div class="flow-step"><div class="num">1</div><div class="step-icon">📝</div><p>Webフォームで<br>貸出申請</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">2</div><div class="step-icon">✅</div><p>管理者が<br>Web上で承認</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">3</div><div class="step-icon">📱</div><p>QRスキャンで<br>持ち出し・返却</p></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">4</div><div class="step-icon">🔍</div><p>履歴がすべて<br>自動記録される</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-tag">FEATURES</div>
+    <h2>必要な機能が<span style="color:var(--primary)">すべて揃っています</span></h2>
+    <p class="section-desc">PC・タブレット・プロジェクターなど、あらゆる機器の貸出管理に対応します。</p>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">📝</div><h3>Web申請・承認フロー</h3><p>申請者がWebフォームで機器・期間・目的を申請。管理者がWeb上で承認・却下。メールや口頭でのやりとりが不要になります。</p></div>
+      <div class="feature-card"><div class="feature-icon">📊</div><h3>リアルタイムステータス管理</h3><p>「貸出中・返却済み・メンテナンス中」の3ステータスをリアルタイム管理。ダッシュボードで全機器の状況を一目で把握できます。</p></div>
+      <div class="feature-card"><div class="feature-icon">📷</div><h3>QRコードで持ち出し・返却</h3><p>機器に貼ったQRコードをスキャンするだけで持ち出しと返却を記録。操作はブラウザのカメラ機能を使うのでアプリ不要です。</p></div>
+      <div class="feature-card"><div class="feature-icon">📖</div><h3>機器・担当者の完全履歴</h3><p>機器ごとの貸出履歴・担当者ごとの利用履歴を完全記録。「いつ・誰に・何を貸したか」がいつでも即座に確認できます。</p></div>
+      <div class="feature-card"><div class="feature-icon">📥</div><h3>CSV出力で監査・棚卸し対応</h3><p>全貸出データをCSVで出力。棚卸し資料・監査対応書類をすぐに準備できます。Excelで開けるUTF-8形式です。</p></div>
+      <div class="feature-card"><div class="feature-icon">🔔</div><h3>Teams通知連携</h3><p>申請・承認・返却などの操作をリアルタイムでTeamsに通知。担当者が画面を見ていなくても、重要なアクションを見逃しません。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-tag">PRICING</div>
+    <h2>シンプルな料金体系</h2>
+    <p class="section-desc">初期費用を払えば、あとは低コストで継続運用できます。</p>
+    <div class="pricing-wrapper">
+      <div class="price-card">
+        <div class="price-name">初期構築費</div>
+        <div class="price-amount">¥200,000<span>（税別）</span></div>
+        <div class="price-note">一回のみ</div>
+        <ul class="price-list">
+          <li>システム初期設定・カスタマイズ</li>
+          <li>機器データの初期登録サポート</li>
+          <li>QRコード作成・印刷データ納品</li>
+          <li>社員向け操作レクチャー（1回）</li>
+          <li>運用マニュアル（PDF）作成</li>
+        </ul>
+        <a href="#contact" class="btn-price">お問い合わせ</a>
+      </div>
+      <div class="price-card featured">
+        <div class="featured-badge">年間契約で安心運用</div>
+        <div class="price-name">月額サポート費</div>
+        <div class="price-amount">¥15,000<span>/月（税別）</span></div>
+        <div class="price-note">年間契約（180,000円/年）</div>
+        <ul class="price-list">
+          <li>クラウドサーバー費用込み</li>
+          <li>Teams通知などの機能追加対応</li>
+          <li>不具合対応・メンテナンス</li>
+          <li>操作方法サポート（メール・電話）</li>
+          <li>機能改善リクエスト対応</li>
+        </ul>
+        <a href="#contact" class="btn-price">お問い合わせ</a>
+      </div>
+    </div>
+    <div class="price-notice">
+      ※ 表示価格はすべて税別です。消費税が別途かかります。<br>
+      ※ 機器数・ユーザー数に上限はありません。社内全部門でご利用いただけます。
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="container">
+    <h2>まずは無料デモをご覧ください</h2>
+    <p>実際のシステムをご覧いただきながら、貴社の課題に合わせてご説明します。<br>お気軽にお問い合わせください。</p>
+    <div class="cta-buttons">
+      <a href="mailto:tesjapan.gk@gmail.com?subject=PC・機器貸出管理システム お問い合わせ" class="btn-cta-white">📧 メールで問い合わせる</a>
+      <a href="tel:07022222091" class="btn-cta-outline">📞 070-2222-2091</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">TEs<span>Japan.gk</span></span>
+      <p>業務効率化のプロとして、<br>中小企業の「面倒」を<br>テクノロジーで解消します。</p>
+    </div>
+    <div class="footer-info">
+      <h4>お問い合わせ</h4>
+      <p>TEsJapan.gk<br>TEL: 070-2222-2091<br>MAIL: tesjapan.gk@gmail.com</p>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 TEsJapan.gk. All Rights Reserved.</div>
+</footer>
+
+</body>
+</html>
