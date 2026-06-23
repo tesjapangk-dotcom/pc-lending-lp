@@ -151,6 +151,17 @@
     .btn-price { display: block; background: var(--primary); color: var(--white); text-decoration: none; padding: 14px; border-radius: 10px; font-weight: 700; margin-top: 24px; }
     .price-notice { text-align: center; margin-top: 32px; font-size: 0.83rem; color: var(--muted); background: var(--white); padding: 16px 24px; border-radius: 10px; max-width: 720px; margin-left: auto; margin-right: auto; border: 1px solid #dbeafe; }
 
+    /* FAQ */
+    .faq { background: var(--white); }
+    .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    details.faq-item { border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+    details.faq-item summary.faq-q { padding: 20px 24px; font-size: 0.95rem; font-weight: 700; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; gap: 12px; }
+    details.faq-item summary.faq-q::-webkit-details-marker { display: none; }
+    details.faq-item summary.faq-q::after { content: '+'; font-size: 1.4rem; color: var(--primary); flex-shrink: 0; }
+    details.faq-item[open] summary.faq-q::after { content: '−'; }
+    details.faq-item summary.faq-q:hover { background: #f8fafc; }
+    details.faq-item .faq-a { padding: 0 24px 20px; font-size: 0.88rem; color: var(--muted); line-height: 1.8; }
+
     .cta { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%); color: var(--white); text-align: center; padding: 88px 40px; }
     .cta h2 { color: var(--white); margin-bottom: 16px; }
     .cta p { color: rgba(255,255,255,0.82); margin-bottom: 40px; }
@@ -287,6 +298,36 @@
     <div class="price-notice">
       ※ 表示価格はすべて税別です。消費税が別途かかります。<br>
       ※ 機器数・ユーザー数に上限はありません。社内全部門でご利用いただけます。
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="container">
+    <div class="section-tag">FAQ</div>
+    <h2>よくあるご質問</h2>
+    <p class="section-desc">導入前に気になる点をまとめました。</p>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary class="faq-q">アプリのインストールは必要ですか？</summary>
+        <p class="faq-a">不要です。ブラウザのみで動作します。QRスキャンもスマホの標準カメラで行えるため、社員への展開がとても簡単です。</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">QRコードはどうやって準備しますか？</summary>
+        <p class="faq-a">初期構築費に含まれています。機器に貼るだけのシールとして印刷データをお渡しします。印刷・貼り付けは貴社で行っていただきます。</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">管理できる機器数や社員数に上限はありますか？</summary>
+        <p class="faq-a">ありません。PC・タブレット・プロジェクターなど何台でも、社員何名でも追加費用なしでご利用いただけます。</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">セキュリティは大丈夫ですか？</summary>
+        <p class="faq-a">ログイン認証付きのシステムです。社外からのアクセスにはIDとパスワードが必要です。また、操作履歴はすべて記録されるため、不正利用の追跡も可能です。</p>
+      </details>
+      <details class="faq-item">
+        <summary class="faq-q">導入期間はどのくらいですか？</summary>
+        <p class="faq-a">ヒアリング〜運用開始まで約2〜3週間が目安です。機器リストをご準備いただくとさらにスムーズに進められます。</p>
+      </details>
     </div>
   </div>
 </section>
